@@ -1,0 +1,27 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.w3.org/1999/xhtml"-->
+<!--&gt;-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div th:text="${user}" />-->
+
+<!--</body>-->
+<!--</html>-->
+
+<div xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <form th:action="@{/login}" method="POST">
+        <input input type="text" id="email" name="email" class="loginLabel" required
+               oninvalid="this.setCustomValidity('Podaj login')"
+               placeholder="e-mail"> <br>
+
+        <input type="password"  id="password" name="password" class="loginLabel" required
+               oninvalid="this.setCustomValidity('Podaj hasło')"> <br>
+
+        <input name="Submit" value="Login" type="Submit" id="logInBut" class="button">
+    </form>
+</div>

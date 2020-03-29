@@ -22,9 +22,31 @@ public class UserController {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("user", userRepository.findById(1));
-        modelAndView.setViewName("test");
+        modelAndView.setViewName("login");
         System.out.println(userRepository.findById(1));
 
         return modelAndView;
     }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public ModelAndView getLogin() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ModelAndView postLogin() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    public ModelAndView getHome() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
+        return modelAndView;
+    }
+
 }
