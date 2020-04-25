@@ -62,10 +62,16 @@ public class TrackService {
         }
     }
 
-    public List<String[][]> getTags(List<Rating> ratings) throws IOException {
-        List<String[][]> tags = new ArrayList<>();
+    public List<List<String>> getTags(List<Rating> ratings) throws IOException {
+        List<List<String>> tags = new ArrayList<>();
         for(int i=0; i<ratings.size(); i++) {
-            tags.add(getTag(ratings.get(i).getTrack().getTrackId()));
+            String[][] tag = getTag(ratings.get(i).getTrack().getTrackId());
+            List<String> newTag = new ArrayList<>();
+
+            for(int j=0; j<tag.length; j++) {
+                newTag.add(tag[j][0]);
+            }
+            tags.add(newTag);
         }
 
         return tags;

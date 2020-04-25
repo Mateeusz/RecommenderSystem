@@ -16,17 +16,17 @@ public class UserController {
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public ModelAndView getUser() {
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("user", userRepository.findById(1));
-        modelAndView.setViewName("login");
-        System.out.println(userRepository.findById(1));
-
-        return modelAndView;
-    }
+//
+//    @RequestMapping(value = "/test", method = RequestMethod.GET)
+//    public ModelAndView getUser() {
+//
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.addObject("user", userRepository.findById(1));
+//        modelAndView.setViewName("login");
+//        System.out.println(userRepository.findById(1));
+//
+//        return modelAndView;
+//    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView getLogin() {
