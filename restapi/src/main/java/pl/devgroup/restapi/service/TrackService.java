@@ -11,6 +11,7 @@ import pl.devgroup.restapi.repository.TracksRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,8 +33,7 @@ public class TrackService {
     }
 
 
-
-    public TrackDetails getTrack(String trackId, String userEmail) throws IOException {
+    public TrackDetails getTrackWithRating(String trackId, String userEmail) throws IOException {
 
         Track track = tracksRepository.findByTrackId(trackId);
         TrackDetails trackDetails = mapper.readValue(new File(RESOURCE_PATH + track.getTrackId() + ".json"), TrackDetails.class);
@@ -42,8 +42,15 @@ public class TrackService {
         if(rating != null) {
             trackDetails.setPoints(rating.getPoints());
         }
-
         return trackDetails;
+    }
+
+    public String[][] getTag(String trackId) throws IOException {
+
+        Track track = tracksRepository.findByTrackId(trackId);
+        TrackDetails trackDetails = mapper.readValue(new File(RESOURCE_PATH + track.getTrackId() + ".json"), TrackDetails.class);
+
+        return trackDetails.getTags();
     }
 
     public void saveRating(TrackDetails trackDetails, String userEmail) {
@@ -53,5 +60,14 @@ public class TrackService {
         } else {
             ratingRepository.updateRating(trackDetails.getPoints(), trackId, userEmail);
         }
+    }
+
+    public List<String[][]> getTags(List<Rating> ratings) throws IOException {
+        List<String[][]> tags = new ArrayList<>();
+        for(int i=0; i<ratings.size(); i++) {
+            tags.add(getTag(ratings.get(i).getTrack().getTrackId()));
+        }
+
+        return tags;
     }
 }
