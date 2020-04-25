@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "tracks")
@@ -19,4 +17,7 @@ public class Track {
     @Id
     @Column(name = "track_id")
     String trackId;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "track")
+    private Set<Rating> ratings;
 }

@@ -40,5 +40,8 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Location> locations;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Rating> ratings;
     
 }

@@ -1,3 +1,14 @@
+
+<script>
+    function updateTextInput(val) {
+    document.getElementById('textInput').innerHTML=val;
+    }
+</script>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
+
+</head>
 <div xmlns:th="http://www.w3.org/1999/xhtml">
 
 
@@ -8,4 +19,15 @@
     <p th:text="${trackDetails.trackId}" />
     <p th:text="${trackDetails.title}" />
 
+    <p th:text="${trackDetails.points}" />
+
+    <form th:action="@{'/getTrack/'+${trackDetails.getTrackId()}}" th:object="${trackDetails}" method="post" enctype="multipart/form-data">
+
+        <input type="range" id="points" th:field="*{points}" name="points" min="1" max="5" onchange="updateTextInput(this.value);" />
+        <p id="textInput" > </p><br/>
+        <hline/>
+        <button class="btn btn-primary" type="submit">Vote</button>
+    </form>
+
+    <span th:utext="${message}"></span>
 </div>
