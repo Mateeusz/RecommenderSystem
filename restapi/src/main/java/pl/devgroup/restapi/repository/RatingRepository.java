@@ -9,6 +9,8 @@ import pl.devgroup.restapi.model.Rating;
 import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 
+import java.util.List;
+
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
 
@@ -24,4 +26,7 @@ public interface RatingRepository extends JpaRepository<Rating, Integer> {
     @Transactional
     @Query(value = "INSERT INTO rating(points, user_id, track_id) VALUES (:points, (SELECT  user_id FROM user_table WHERE email = :user_email), :track);", nativeQuery = true)
     void insertRating(@Param("points") int points, @Param("track") String trackId, @Param("user_email") String userEmail);
+
+    @Query(value = "SELECT * FROM rating WHERE user_id = (SELECT  user_id FROM user_table WHERE email = :user_email)", nativeQuery = true)
+    List<Rating> findAllByEmail(@Param("user_email") String email);
 }

@@ -35,7 +35,7 @@ public class TrackController {
     @RequestMapping(value = "/getTrack/{trackId}", method = RequestMethod.GET)
     public ModelAndView getTrack(@PathVariable("trackId") String trackId, Authentication authentication) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("trackDetails", trackService.getTrack(trackId, authentication.getName()));
+        modelAndView.addObject("trackDetails", trackService.getTrackWithRating(trackId, authentication.getName()));
         modelAndView.setViewName("track");
         return modelAndView;
     }
@@ -47,7 +47,7 @@ public class TrackController {
         modelAndView.addObject("trackDetails", trackDetails);
         modelAndView.addObject("message", "Thank's for your vote!");
 
-        TrackDetails trackDetails1 = trackService.getTrack(trackDetails.getTrackId(), authentication.getName());
+        TrackDetails trackDetails1 = trackService.getTrackWithRating(trackDetails.getTrackId(), authentication.getName());
         trackDetails.setArtist(trackDetails1.getArtist());
         trackDetails.setTimestamp(trackDetails1.getTimestamp());
         trackDetails.setSimilars(trackDetails1.getSimilars());
