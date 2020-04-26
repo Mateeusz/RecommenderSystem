@@ -45,6 +45,14 @@ public class TrackService {
         return trackDetails;
     }
 
+    public TrackDetails getTrackDetailById(String trackId) throws IOException {
+        Track track = tracksRepository.findByTrackId(trackId);
+        TrackDetails trackDetails = mapper.readValue(new File(RESOURCE_PATH + track.getTrackId() + ".json"), TrackDetails.class);
+
+        return trackDetails;
+    }
+
+
     public String[][] getTag(String trackId) throws IOException {
 
         Track track = tracksRepository.findByTrackId(trackId);

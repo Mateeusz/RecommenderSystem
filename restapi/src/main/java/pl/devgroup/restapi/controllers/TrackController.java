@@ -22,13 +22,12 @@ import java.util.List;
 public class TrackController {
 
     private TrackService trackService;
-
-    @Autowired
     private Matrix matrix;
 
     @Autowired
-    public TrackController(TrackService trackService) {
+    public TrackController(TrackService trackService, Matrix matrix) {
         this.trackService = trackService;
+        this.matrix = matrix;
     }
 
     @RequestMapping(value = "/allTracks", method = RequestMethod.GET)
@@ -61,7 +60,6 @@ public class TrackController {
         trackDetails.setTags(trackDetails1.getTags());
         trackDetails.setTitle(trackDetails1.getTitle());
 
-        System.out.println("---------->> " + trackDetails.toString()+ "PPP->> " + authentication.getName());
         trackService.saveRating(trackDetails, authentication.getName());
         modelAndView.setViewName("track");
 
@@ -70,21 +68,12 @@ public class TrackController {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView test(Authentication authentication) throws IOException {
-        HashMap<CharSequence, Integer> user1Map = (HashMap<CharSequence, Integer>) matrix.getMatrix(authentication.getName());
-
-        List<SimilarUser> list = matrix.getSimilarUsers(user1Map);
-
-        for (SimilarUser similarUser : list ) {
-            System.out.println(similarUser.toString());
-        }
 
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("recommendations", matrix.getRecommendations(authentication.getName()));
+
         modelAndView.setViewName("test");
 
         return modelAndView;
     }
-
-
-
-
 }
