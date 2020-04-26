@@ -29,9 +29,10 @@ public class TrackController {
     }
 
     @RequestMapping(value = "/allTracks", method = RequestMethod.GET)
-    public ModelAndView getTracks() {
+    public ModelAndView getTracks(Authentication authentication) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("trackList", trackService.getTracks());
+        modelAndView.addObject("activeUser", authentication.getName());
         modelAndView.setViewName("tracks");
         return modelAndView;
     }
@@ -40,6 +41,7 @@ public class TrackController {
     public ModelAndView getTrack(@PathVariable("trackId") String trackId, Authentication authentication) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("trackDetails", trackService.getTrackWithRating(trackId, authentication.getName()));
+        modelAndView.addObject("activeUser", authentication.getName());
         modelAndView.setViewName("track");
         return modelAndView;
     }
@@ -50,6 +52,7 @@ public class TrackController {
 
         modelAndView.addObject("trackDetails", trackDetails);
         modelAndView.addObject("message", "Thank's for your vote!");
+        modelAndView.addObject("activeUser", authentication.getName());
 
         TrackDetails trackDetails1 = trackService.getTrackWithRating(trackDetails.getTrackId(), authentication.getName());
         trackDetails.setArtist(trackDetails1.getArtist());
@@ -64,13 +67,14 @@ public class TrackController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @RequestMapping(value = "/collaborativeFiltering", method = RequestMethod.GET)
     public ModelAndView test(Authentication authentication) throws IOException {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("recommendations", matrix.getRecommendations(authentication.getName()));
+        modelAndView.addObject("activeUser", authentication.getName());
 
-        modelAndView.setViewName("test");
+        modelAndView.setViewName("collaborativeFiltering");
 
         return modelAndView;
     }

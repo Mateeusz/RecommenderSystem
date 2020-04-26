@@ -5,11 +5,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
 
 </head>
-<script>
-    function updateTextInput(val) {
-    document.getElementById('textInput').innerHTML=val;
-    }
-</script>
 <body>
 
 <ul class="nav nav-tabs">
@@ -17,10 +12,10 @@
         <a class="nav-link " href="/home">Recommender System</a>
     </li>
     <li class="nav-item pl-3 pr-3">
-        <a class="nav-link " href="/allTracks">List all tracks</a>
+        <a class="nav-link" href="/allTracks">List all tracks</a>
     </li>
     <li class="nav-item pl-3 pr-3">
-        <a class="nav-link " href="/collaborativeFiltering">Collaborative Filtering</a>
+        <a class="nav-link active" href="/collaborativeFiltering">Collaborative Filtering</a>
     </li>
     <li class="nav-item pl-3 pr-3">
         <a class="nav-link" href="#">Content Based</a>
@@ -32,7 +27,7 @@
 <div class="container-fluid" xmlns:th="http://www.w3.org/1999/xhtml">
     <main role="main" class="col-md-10 ml-auto mr-auto">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Track details</h1>
+            <h1 class="h2">Collaborative Filtering recommendations</h1>
             <div class="pl-5 ml-5">
                 <p th:text="'Logged as: '+${activeUser}" />
             </div>
@@ -41,27 +36,16 @@
             </div>
         </div>
         <div>
-            <div>
 
+            <div th:each="trackDetails : ${recommendations}">
                 <h2 th:text="${trackDetails.title}" />
                 <h4 th:text="${trackDetails.artist}" />
                 <h6 th:text="${trackDetails.trackId}" />
-
-                <h6 th:text="${trackDetails.points}" />
-
-                <form th:action="@{'/getTrack/'+${trackDetails.getTrackId()}}" th:object="${trackDetails}" method="post" enctype="multipart/form-data">
-
-                    <input type="range" id="points" th:field="*{points}" name="points" min="1" max="5" onchange="updateTextInput(this.value);" />
-                    <h6 id="textInput" > </h6><br/>
-                    <hline/>
-                    <button class="btn btn-primary" type="submit">Vote</button>
-                </form>
-
-                <span th:utext="${message}"></span>
+                <hr>
             </div>
+
         </div>
     </main>
 </div>
 </body>
 </html>
-
