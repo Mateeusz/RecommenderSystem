@@ -9,14 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import pl.devgroup.restapi.ColaborativeFiltering.Matrix;
-import pl.devgroup.restapi.model.SimilarUser;
 import pl.devgroup.restapi.model.TrackDetails;
 import pl.devgroup.restapi.service.TrackService;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
+
 
 @Controller
 public class TrackController {

@@ -19,7 +19,7 @@ public class TrackService {
 
     private TracksRepository tracksRepository;
     private RatingRepository ratingRepository;
-    protected ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper();
     private static final String RESOURCE_PATH = "src/main/resources/trackDetails/";
 
     @Autowired
@@ -47,13 +47,12 @@ public class TrackService {
 
     public TrackDetails getTrackDetailById(String trackId) throws IOException {
         Track track = tracksRepository.findByTrackId(trackId);
-        TrackDetails trackDetails = mapper.readValue(new File(RESOURCE_PATH + track.getTrackId() + ".json"), TrackDetails.class);
 
-        return trackDetails;
+        return  mapper.readValue(new File(RESOURCE_PATH + track.getTrackId() + ".json"), TrackDetails.class);
     }
 
 
-    public String[][] getTag(String trackId) throws IOException {
+    private String[][] getTag(String trackId) throws IOException {
 
         Track track = tracksRepository.findByTrackId(trackId);
         TrackDetails trackDetails = mapper.readValue(new File(RESOURCE_PATH + track.getTrackId() + ".json"), TrackDetails.class);
@@ -72,12 +71,12 @@ public class TrackService {
 
     public List<List<String>> getTags(List<Rating> ratings) throws IOException {
         List<List<String>> tags = new ArrayList<>();
-        for(int i=0; i<ratings.size(); i++) {
-            String[][] tag = getTag(ratings.get(i).getTrack().getTrackId());
+        for (Rating rating : ratings) {
+            String[][] tag = getTag(rating.getTrack().getTrackId());
             List<String> newTag = new ArrayList<>();
 
-            for(int j=0; j<tag.length; j++) {
-                newTag.add(tag[j][0]);
+            for (String[] strings : tag) {
+                newTag.add(strings[0]);
             }
             tags.add(newTag);
         }
