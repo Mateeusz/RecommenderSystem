@@ -11,6 +11,7 @@ import pl.devgroup.restapi.repository.TracksRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,7 +19,7 @@ public class TrackService {
 
     private TracksRepository tracksRepository;
     private RatingRepository ratingRepository;
-    protected ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper();
     private static final String RESOURCE_PATH = "src/main/resources/trackDetails/";
 
     @Autowired
@@ -31,7 +32,8 @@ public class TrackService {
         return tracksRepository.findAll();
     }
 
-    public TrackDetails getTrack(String trackId, String userEmail) throws IOException {
+
+    public TrackDetails getTrackWithRating(String trackId, String userEmail) throws IOException {
 
         Track track = tracksRepository.findByTrackId(trackId);
         TrackDetails trackDetails = mapper.readValue(new File(RESOURCE_PATH + track.getTrackId() + ".json"), TrackDetails.class);
@@ -44,6 +46,22 @@ public class TrackService {
         return trackDetails;
     }
 
+
+    public TrackDetails getTrackDetailById(String trackId) throws IOException {
+        Track track = tracksRepository.findByTrackId(trackId);
+
+        return  mapper.readValue(new File(RESOURCE_PATH + track.getTrackId() + ".json"), TrackDetails.class);
+    }
+
+
+    private String[][] getTag(String trackId) throws IOException {
+
+        Track track = tracksRepository.findByTrackId(trackId);
+        TrackDetails trackDetails = mapper.readValue(new File(RESOURCE_PATH + track.getTrackId() + ".json"), TrackDetails.class);
+
+        return trackDetails.getTags();
+    }
+
     public void saveRating(TrackDetails trackDetails, String userEmail) {
         String trackId = trackDetails.getTrackId();
         if(ratingRepository.getRating(trackId, userEmail)==null) {
@@ -51,5 +69,20 @@ public class TrackService {
         } else {
             ratingRepository.updateRating(trackDetails.getPoints(), trackId, userEmail);
         }
+    }
+
+    public List<List<String>> getTags(List<Rating> ratings) throws IOException {
+        List<List<String>> tags = new ArrayList<>();
+        for (Rating rating : ratings) {
+            String[][] tag = getTag(rating.getTrack().getTrackId());
+            List<String> newTag = new ArrayList<>();
+
+            for (String[] strings : tag) {
+                newTag.add(strings[0]);
+            }
+            tags.add(newTag);
+        }
+
+        return tags;
     }
 }

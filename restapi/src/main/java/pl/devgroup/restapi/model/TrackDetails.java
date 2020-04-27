@@ -1,7 +1,7 @@
 package pl.devgroup.restapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jdk.nashorn.internal.objects.annotations.Property;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

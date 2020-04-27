@@ -1,33 +1,66 @@
-
-<script>
-    function updateTextInput(val) {
-    document.getElementById('textInput').innerHTML=val;
-    }
-</script>
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
 
 </head>
-<div xmlns:th="http://www.w3.org/1999/xhtml">
+<script>
+    function updateTextInput(val) {
+    document.getElementById('textInput').innerHTML=val;
+    }
+</script>
+<body>
 
+<ul class="nav nav-tabs">
+    <li class="nav-item ml-5 pl-3 pr-3">
+        <a class="nav-link " href="/home">Recommender System</a>
+    </li>
+    <li class="nav-item pl-3 pr-3">
+        <a class="nav-link " href="/allTracks">List all tracks</a>
+    </li>
+    <li class="nav-item pl-3 pr-3">
+        <a class="nav-link " href="/collaborativeFiltering">Collaborative Filtering</a>
+    </li>
+    <li class="nav-item pl-3 pr-3">
+        <a class="nav-link" href="#">Content Based</a>
+    </li>
+</ul>
 
-    <p th:text="${trackDetails.artist}" />
-    <p th:text="${trackDetails.timestamp}" />
-    <p th:text="${trackDetails.similars}" />
-    <p th:text="${trackDetails.tags}" />
-    <p th:text="${trackDetails.trackId}" />
-    <p th:text="${trackDetails.title}" />
+<br><br>
 
-    <p th:text="${trackDetails.points}" />
+<div class="container-fluid" xmlns:th="http://www.w3.org/1999/xhtml">
+    <main role="main" class="col-md-10 ml-auto mr-auto">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Track details</h1>
+            <div class="pl-5 ml-5">
+                <p th:text="'Logged as: '+${activeUser}" />
+            </div>
+            <div>
+                <a class="btn btn-sm btn-danger" href="/logout">Sign out</a>
+            </div>
+        </div>
+        <div>
+            <div>
 
-    <form th:action="@{'/getTrack/'+${trackDetails.getTrackId()}}" th:object="${trackDetails}" method="post" enctype="multipart/form-data">
+                <h2 th:text="${trackDetails.title}" />
+                <h4 th:text="${trackDetails.artist}" />
+                <h6 th:text="${trackDetails.trackId}" />
 
-        <input type="range" id="points" th:field="*{points}" name="points" min="1" max="5" onchange="updateTextInput(this.value);" />
-        <p id="textInput" > </p><br/>
-        <hline/>
-        <button class="btn btn-primary" type="submit">Vote</button>
-    </form>
+                <h6 th:text="${trackDetails.points}" />
 
-    <span th:utext="${message}"></span>
+                <form th:action="@{'/getTrack/'+${trackDetails.getTrackId()}}" th:object="${trackDetails}" method="post" enctype="multipart/form-data">
+
+                    <input type="range" id="points" th:field="*{points}" name="points" min="1" max="5" onchange="updateTextInput(this.value);" />
+                    <h6 id="textInput" > </h6><br/>
+                    <hline/>
+                    <button class="btn btn-primary" type="submit">Vote</button>
+                </form>
+
+                <span th:utext="${message}"></span>
+            </div>
+        </div>
+    </main>
 </div>
+</body>
+</html>
