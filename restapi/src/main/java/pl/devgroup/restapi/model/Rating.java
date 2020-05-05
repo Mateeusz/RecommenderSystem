@@ -36,4 +36,35 @@ public class Rating {
     @JoinColumn(name = "track_id")
     Track track;
 
+    public Integer getRatingId() {
+        return ratingId;
+    }
+
+    public void setRatingId(Integer ratingId) {
+        this.ratingId = ratingId;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Track getTrack() {
+        return track;
+    }
+
+    public void setTrack(Track track) {
+        this.track = track;
+    }
 }
