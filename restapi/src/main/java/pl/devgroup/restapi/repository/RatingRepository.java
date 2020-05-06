@@ -26,6 +26,7 @@ public interface RatingRepository extends JpaRepository<Rating, Integer> {
     @Query(value = "INSERT INTO rating(points, user_id, track_id) VALUES (:points, (SELECT  user_id FROM user_table WHERE email = :user_email), :track);", nativeQuery = true)
     void insertRating(@Param("points") int points, @Param("track") String trackId, @Param("user_email") String userEmail);
 
-    @Query(value = "SELECT * FROM rating WHERE user_id = (SELECT  user_id FROM user_table WHERE email = :user_email)", nativeQuery = true)
+    @Transactional
+    @Query(value = "SELECT * FROM rating WHERE user_id = (SELECT  user_id FROM user_table WHERE email = :user_email LIMIT 1)", nativeQuery = true)
     List<Rating> findAllByEmail(@Param("user_email") String email);
 }
