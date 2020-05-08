@@ -61,6 +61,9 @@ public class TrackService {
         return  mapper.readValue(new File(RESOURCE_PATH + trackId + ".json"), TrackDetails.class);
     }
 
+    public TrackDetails getTrackDetailByIdWithoutTrackWithOutJson(String trackId) throws IOException {
+        return  mapper.readValue(new File(RESOURCE_PATH + trackId), TrackDetails.class);
+    }
 
     private String[][] getTag(String trackId) throws IOException {
 

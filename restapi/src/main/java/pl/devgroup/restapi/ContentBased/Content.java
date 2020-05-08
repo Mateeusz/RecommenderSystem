@@ -9,9 +9,9 @@ import pl.devgroup.restapi.repository.RatingRepository;
 import pl.devgroup.restapi.repository.UserRepository;
 import pl.devgroup.restapi.service.TrackService;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -22,7 +22,6 @@ public class Content {
     private UserRepository userRepository;
 
     private List<Track> recoomendedTracks = new ArrayList<>();
-    private String[][] similars;
 
     public Content() {}
 
@@ -34,48 +33,49 @@ public class Content {
     }
     public List<Track> createRecommendedList(String email) throws IOException {
         Track t = findBestRatedTrack(email);
-        recoomendedTracks.add(t);
-        for (int i=0; i<2; i++){
-            recoomendedTracks.add(getSimilarTrackNotInTheList(recoomendedTracks.get(i)));
-        }
+       // recoomendedTracks.add(t); // dodanie 1 piosenki
+
+        File[] files = new File("C:/Users/domin/OneDrive/Pulpit/Projekt/RecommenderSystem/restapi/src/main/resources/trackDetails").listFiles();
+        TrackDetails bestSong = trackService.getTrackDetailById(t.getTrackId());
+        List<TrackDetails> jsonList = getJsonFiles(files);
+        getListOfSililarSong(bestSong, jsonList);
+
+        System.out.println(recoomendedTracks);
+
         return recoomendedTracks;
     }
 
-    public Track getSimilarTrackNotInTheList(Track t) throws IOException {
-        TrackDetails td = trackService.getTrackDetailByIdWithoutTrack(t.getTrackId());
-        similars = td.getSimilars();
-        int i = 0;
-        boolean petla = true;
-
-        while(petla) {
-            if (recoomendedTracks.contains(similars[i][0])) {
-                i++;
-                if (i >= 1) petla = false;
-            } else {
-
-                TrackDetails next = trackService.getTrackDetailByIdWithoutTrack(similars[i][0]);
-                petla = false;
-            }
-        }
-        return trackService.getTrackById(similars[i][0]);
-    }
-
-    public Track findBestRatedTrack(String activeUserEmail){
+    public Track findBestRatedTrack(String activeUserEmail) throws IOException {
         Track t = new Track();
-//        List<Rating> ratings = ratingRepository.findAllByEmail(activeUserEmail);
-        Track doWyszukania = new Track();
-        doWyszukania.setTrackId("TRAAADZ128F9348C2E");
-        Rating[] ratingsTable = new Rating[1];
-        Rating ra = new Rating();
-        ra.setPoints(5);
-        ra.setTrack(doWyszukania);
-        ratingsTable[0] = ra;
-        List<Rating> ratings  = Arrays.asList(ratingsTable);
+        List<Rating> ratings = ratingRepository.findAllByEmail(activeUserEmail);
         int maxPoints=0;
         for (Rating r : ratings) {
             if (r.getPoints() > maxPoints)  t = r.getTrack();
         }
 
         return t;
+    }
+
+    public void getListOfSililarSong(TrackDetails song, List<TrackDetails> listOfTrackDetails){
+        String[][] tags = song.getTags();
+        String bestTag = tags[0][0];
+        for (TrackDetails trackDetails : listOfTrackDetails) {
+            String[][] newTags = trackDetails.getTags();
+            for (int i=0; i<newTags.length; i++){
+                if(bestTag.equals(newTags[i][0])){
+                    recoomendedTracks.add(trackService.getTrackById(trackDetails.getTrackId()));
+                }
+            }
+        }
+    }
+
+    public List<TrackDetails> getJsonFiles(File[] files) throws IOException {
+
+        List<TrackDetails> list = new ArrayList<>();
+        for (File file : files) {
+            TrackDetails track = trackService.getTrackDetailByIdWithoutTrackWithOutJson(file.getName());
+            list.add(track);
+        }
+        return list;
     }
 }
