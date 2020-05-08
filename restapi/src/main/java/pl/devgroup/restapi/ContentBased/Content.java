@@ -11,8 +11,8 @@ import pl.devgroup.restapi.service.TrackService;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class Content {
@@ -40,7 +40,7 @@ public class Content {
         List<TrackDetails> jsonList = getJsonFiles(files);
         getListOfSililarSong(bestSong, jsonList);
 
-        System.out.println(recoomendedTracks);
+//        System.out.println(recoomendedTracks);
         List<TrackDetails> newList = new ArrayList<>();
         for (int i=0; i<10 && i< recoomendedTracks.size(); i++)
         newList.add(recoomendedTracks.get(i));
@@ -59,6 +59,7 @@ public class Content {
     }
 
     public void getListOfSililarSong(TrackDetails song, List<TrackDetails> listOfTrackDetails){
+        HashMap<TrackDetails, Integer> trackDetailsMap = new HashMap<>();
         String[][] tags = song.getTags();
         String bestTag = tags[0][0];
         String bestTag2;
@@ -74,14 +75,44 @@ public class Content {
                 if(bestTag.equals(newTags[i][0])){
                     for (int j=0; j <newTags.length; j++){
                         if (bestTag2.equals(newTags[j][0])) {
-                            recoomendedTracks.add(trackDetails);
+                           // recoomendedTracks.add(trackDetails);
+                            int weight = Integer.valueOf(newTags[j][1]) +  Integer.valueOf(newTags[i][1]);
+                            trackDetailsMap.put(trackDetails, weight);
+
                         }
                     }
                 }
             }
         }
 
+        trackDetailsMap = sortByValue(trackDetailsMap);
 
+        for (TrackDetails track:trackDetailsMap.keySet()  ) {
+            recoomendedTracks.add(track);
+        }
+    }
+
+    public static HashMap<TrackDetails, Integer> sortByValue(HashMap<TrackDetails, Integer> hm)
+    {
+        // Create a list from elements of HashMap
+        List<Map.Entry<TrackDetails, Integer> > list =
+                new LinkedList<Map.Entry<TrackDetails, Integer> >(hm.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<TrackDetails, Integer> >() {
+            public int compare(Map.Entry<TrackDetails, Integer> o1,
+                               Map.Entry<TrackDetails, Integer> o2)
+            {
+                return (o2.getValue()).compareTo(o1.getValue());
+            }
+        });
+
+        // put data from sorted list to hashmap
+        HashMap<TrackDetails, Integer> temp = new LinkedHashMap<TrackDetails, Integer>();
+        for (Map.Entry<TrackDetails, Integer> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
     }
 
     public List<TrackDetails> getJsonFiles(File[] files) throws IOException {
