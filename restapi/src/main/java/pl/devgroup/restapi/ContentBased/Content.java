@@ -21,7 +21,7 @@ public class Content {
     private TrackService trackService;
     private UserRepository userRepository;
 
-    private List<Track> recoomendedTracks = new ArrayList<>();
+    private List<TrackDetails> recoomendedTracks = new ArrayList<>();
 
     public Content() {}
 
@@ -31,7 +31,7 @@ public class Content {
         this.trackService = trackService;
         this.userRepository = userRepository;
     }
-    public List<Track> createRecommendedList(String email) throws IOException {
+    public List<TrackDetails> createRecommendedList(String email) throws IOException {
         Track t = findBestRatedTrack(email);
        // recoomendedTracks.add(t); // dodanie 1 piosenki
 
@@ -41,8 +41,10 @@ public class Content {
         getListOfSililarSong(bestSong, jsonList);
 
         System.out.println(recoomendedTracks);
-
-        return recoomendedTracks;
+        List<TrackDetails> newList = new ArrayList<>();
+        for (int i=0; i<10 && i< recoomendedTracks.size(); i++)
+        newList.add(recoomendedTracks.get(i));
+        return newList;
     }
 
     public Track findBestRatedTrack(String activeUserEmail) throws IOException {
@@ -59,14 +61,27 @@ public class Content {
     public void getListOfSililarSong(TrackDetails song, List<TrackDetails> listOfTrackDetails){
         String[][] tags = song.getTags();
         String bestTag = tags[0][0];
+        String bestTag2;
+        if (tags.length <= 1) {
+            bestTag2 = bestTag;
+        }
+        else {
+            bestTag2 = tags[1][0];
+        }
         for (TrackDetails trackDetails : listOfTrackDetails) {
             String[][] newTags = trackDetails.getTags();
             for (int i=0; i<newTags.length; i++){
                 if(bestTag.equals(newTags[i][0])){
-                    recoomendedTracks.add(trackService.getTrackById(trackDetails.getTrackId()));
+                    for (int j=0; j <newTags.length; j++){
+                        if (bestTag2.equals(newTags[j][0])) {
+                            recoomendedTracks.add(trackDetails);
+                        }
+                    }
                 }
             }
         }
+
+
     }
 
     public List<TrackDetails> getJsonFiles(File[] files) throws IOException {
