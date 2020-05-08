@@ -61,18 +61,18 @@ public class Content {
     public void getListOfSililarSong(TrackDetails song, List<TrackDetails> listOfTrackDetails){
         HashMap<TrackDetails, Integer> trackDetailsMap = new HashMap<>();
         String[][] tags = song.getTags();
-        List<String> listOfTags = new ArrayList<>();
+        HashMap<String, Integer> mapOfTags = new HashMap<>();
         for (int i=0; i<tags.length; i++){
-            listOfTags.add(tags[i][0]);
+            mapOfTags.put(tags[i][0], Integer.valueOf(tags[i][1]));
         }
 
         int tagWeight = 0;
         for (TrackDetails trackDetails : listOfTrackDetails) {
             String[][] newTags = trackDetails.getTags();
-            for (int i = 0; i<listOfTags.size(); i++){
+            for (int i = 0; i<mapOfTags.size(); i++){
                 for (int j = 0; j<newTags.length; j++){
-                    if(listOfTags.get(i).equals(newTags[j][0])) {
-                         tagWeight = tagWeight + Integer.valueOf(newTags[j][1]);
+                    if(mapOfTags.keySet().toArray()[i].equals(newTags[j][0])) {
+                         tagWeight = tagWeight + Math.min(Integer.valueOf(newTags[j][1]),Integer.valueOf(mapOfTags.values().toArray()[i].toString()));
 
                     }
                 }
