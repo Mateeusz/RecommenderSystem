@@ -61,32 +61,26 @@ public class Content {
     public void getListOfSililarSong(TrackDetails song, List<TrackDetails> listOfTrackDetails){
         HashMap<TrackDetails, Integer> trackDetailsMap = new HashMap<>();
         String[][] tags = song.getTags();
-        String bestTag = tags[0][0];
-        String bestTag2;
-        if (tags.length <= 1) {
-            bestTag2 = bestTag;
+        List<String> listOfTags = new ArrayList<>();
+        for (int i=0; i<tags.length; i++){
+            listOfTags.add(tags[i][0]);
         }
-        else {
-            bestTag2 = tags[1][0];
-        }
+
+        int tagWeight = 0;
         for (TrackDetails trackDetails : listOfTrackDetails) {
             String[][] newTags = trackDetails.getTags();
-            for (int i=0; i<newTags.length; i++){
-                if(bestTag.equals(newTags[i][0])){
-                    for (int j=0; j <newTags.length; j++){
-                        if (bestTag2.equals(newTags[j][0])) {
-                           // recoomendedTracks.add(trackDetails);
-                            int weight = Integer.valueOf(newTags[j][1]) +  Integer.valueOf(newTags[i][1]);
-                            trackDetailsMap.put(trackDetails, weight);
+            for (int i = 0; i<listOfTags.size(); i++){
+                for (int j = 0; j<newTags.length; j++){
+                    if(listOfTags.get(i).equals(newTags[j][0])) {
+                         tagWeight = tagWeight + Integer.valueOf(newTags[j][1]);
 
-                        }
                     }
                 }
             }
+            trackDetailsMap.put(trackDetails, tagWeight);
+            tagWeight=0;
         }
-
         trackDetailsMap = sortByValue(trackDetailsMap);
-
         for (TrackDetails track:trackDetailsMap.keySet()  ) {
             recoomendedTracks.add(track);
         }
