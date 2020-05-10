@@ -28,10 +28,9 @@
     <main role="main" class="col-md-10 ml-auto mr-auto">
         <div>
             <div th:each="trackDetails : ${recommendedTrack}">
+                <h2 th:text="${trackDetails.title}" />
+                <h4 th:text="${trackDetails.artist}" />
                 <h6 th:text="${trackDetails.trackId}" />
-                <form th:action="@{'/getTrack/'+${trackDetails.trackId}}" method="GET" class="form-signin">
-                    <button class="btn btn-sm btn-info" type="submit">Details</button>
-                </form>
                 <hr>
             </div>
         </div>

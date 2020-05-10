@@ -35,7 +35,7 @@ public class Content {
         Track t = findBestRatedTrack(email);
        // recoomendedTracks.add(t); // dodanie 1 piosenki
 
-        File[] files = new File("C:/Users/domin/OneDrive/Pulpit/Projekt/RecommenderSystem/restapi/src/main/resources/trackDetails").listFiles();
+        File[] files = new File("src/main/resources/trackDetails").listFiles();
         TrackDetails bestSong = trackService.getTrackDetailById(t.getTrackId());
         List<TrackDetails> jsonList = getJsonFiles(files);
         getListOfSililarSong(bestSong, jsonList);
