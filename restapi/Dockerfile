@@ -9,6 +9,9 @@ RUN git clone https://github.com/Mateeusz/RecommenderSystem.git
 #Set working directory
 WORKDIR /RecommenderSystem/restapi
 
+RUN git pull
+RUN git checkout docker
+
 # install dependencies
 RUN mvn clean package
 
