@@ -25,4 +25,20 @@ public class Track {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "track")
     private Set<Rating> ratings;
+
+    public String getTrackId() {
+        return trackId;
+    }
+
+    public void setTrackId(String trackId) {
+        this.trackId = trackId;
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
+    }
 }

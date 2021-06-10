@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import pl.devgroup.restapi.ColaborativeFiltering.Matrix;
+import pl.devgroup.restapi.ContentBased.Content;
 import pl.devgroup.restapi.model.TrackDetails;
 import pl.devgroup.restapi.service.TrackService;
 
@@ -22,11 +23,13 @@ public class TrackController {
 
     private TrackService trackService;
     private Matrix matrix;
+    private Content content;
 
     @Autowired
-    public TrackController(TrackService trackService, Matrix matrix) {
+    public TrackController(TrackService trackService, Matrix matrix, Content content) {
         this.trackService = trackService;
         this.matrix = matrix;
+        this.content = content;
     }
 
     @RequestMapping(value = "/allTracks", method = RequestMethod.GET)
@@ -78,6 +81,18 @@ public class TrackController {
         modelAndView.addObject("activeUser", authentication.getName());
 
         modelAndView.setViewName("collaborativeFiltering");
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/contentBased", method = RequestMethod.GET)
+    public ModelAndView contentBased(Authentication authentication) throws IOException {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("activeUser", authentication.getName());
+        modelAndView.addObject("recommendedTrack", content.createRecommendedList(authentication.getName()));
+
+        modelAndView.setViewName("contentBased");
 
         return modelAndView;
     }
